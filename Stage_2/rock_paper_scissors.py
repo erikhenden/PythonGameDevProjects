@@ -28,9 +28,9 @@ while running:
                     break
                 elif player_choice not in rps_list:
                     print("Please enter a valid choice")
-                else:
+                else:  # The user has entered either r, p or s
                     break
-            if playing_round is False:  # back to main menu
+            if playing_round is False:  # Back to main menu
                 break
 
             # Build tension by adding time
