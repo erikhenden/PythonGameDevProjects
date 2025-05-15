@@ -16,9 +16,9 @@ while user_guess != random_number:  # Continue the game until user_guess equals 
             print("\nPlease enter a valid number")
 
     # Check if user_guess is higher or lower than correct answer
-    if int(user_guess) < random_number:
+    if user_guess < random_number:
         print("\nThe correct number is higher")
-    elif int(user_guess) > random_number:
+    elif user_guess > random_number:
         print("\nThe correct number is lower")
 
     attempts += 1  # Increase attempt-counter for each loop
