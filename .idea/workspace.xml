@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3449fd07-6a5a-46d7-954d-f007f4a13492" name="Changes" comment="Update">
-      <change afterPath="$PROJECT_DIR$/wordle/app.py" afterDir="false" />
+    <list default="true" id="3449fd07-6a5a-46d7-954d-f007f4a13492" name="Changes" comment="wordle">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wordle/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/wordle/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +35,9 @@
     &quot;accountId&quot;: &quot;f386f36c-6e40-4ea0-9a09-41ec086becf6&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/wordle/app.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -54,7 +57,8 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true"
+    "ignore.virus.scanning.warn.message": "true",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="SharedIndexes">
@@ -108,12 +112,20 @@
       <option name="presentableId" value="LOCAL−00005" />
       <updated>1760475244895</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL−00006" summary="wordle">
+      <option name="closed" value="true" />
+      <created>1771581404447</created>
+      <option name="number" value="LOCAL−00006" />
+      <option name="presentableId" value="LOCAL−00006" />
+      <updated>1771581404447</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Update - minimal example of number guessing game" />
     <MESSAGE value="Update" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update" />
+    <MESSAGE value="wordle" />
+    <option name="LAST_COMMIT_MESSAGE" value="wordle" />
   </component>
 </project>
