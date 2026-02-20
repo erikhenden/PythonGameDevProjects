@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3449fd07-6a5a-46d7-954d-f007f4a13492" name="Changes" comment="Update">
-      <change afterPath="$PROJECT_DIR$/Stage_2/capitals.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wordle/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Stage_2/quiz_game.py" beforeDir="false" afterPath="$PROJECT_DIR$/Stage_2/quiz_game.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +45,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.app.executor": "Run",
     "Python.minimal_example.executor": "Run",
     "Python.quiz_game.executor": "Run",
     "Python.rock_paper_scissors.executor": "Run",
@@ -60,7 +60,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-d9fa9deec7cb-d902c0275401-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-252.23892.515" />
+        <option value="bundled-python-sdk-4762d8aabb82-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.30387.173" />
       </set>
     </attachedChunks>
   </component>
@@ -101,7 +101,14 @@
       <option name="presentableId" value="LOCAL−00004" />
       <updated>1747338419150</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL−00005" summary="Update">
+      <option name="closed" value="true" />
+      <created>1760475244895</created>
+      <option name="number" value="LOCAL−00005" />
+      <option name="presentableId" value="LOCAL−00005" />
+      <updated>1760475244895</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
