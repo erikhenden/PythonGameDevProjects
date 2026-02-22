@@ -98,7 +98,12 @@ def play(player_name, stat_class, rounds=5):
     # Game loop
     for rnd in range(rounds):
         print(f"\nRound: {rnd + 1}")
-        guess = get_str("Enter your guess: ")
+        while True:
+            guess = get_str("Enter your guess: ")
+            if len(guess) != word_length:
+                print(f"Your guess must be {word_length} letters, please try again.")
+                continue
+            break
 
         # Check guess against word
         for i, char in enumerate(guess):
