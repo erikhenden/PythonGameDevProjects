@@ -1,0 +1,7 @@
+question 1:
+when was google established?
+answer 1: 1998
+
+question 2:
+when was microsoft established?
+answer 2: 1986
