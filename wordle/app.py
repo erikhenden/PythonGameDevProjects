@@ -61,7 +61,7 @@ def welcome_message():
 
 def play(player_name, stat_class, rounds=5):
 
-    correct_word = None
+    won = False
 
     # Get difficulty
     while True:
@@ -115,12 +115,11 @@ def play(player_name, stat_class, rounds=5):
         # Check if the guess is correct, or "game over"
         if guess == word:
             print(f"You correctly guessed the word {word}! Congratulations!")
-            correct_word = True
-            stat_class.add_stat(player_name, difficulty, word_length, rnd+1, correct_word)
+            won = True
+            stat_class.add_stat(player_name, difficulty, word_length, rnd+1, won)
             break
         elif guess != word and rnd == rounds - 1:
-            correct_word = False
-            stat_class.add_stat(player_name, difficulty, word_length, rnd + 1, correct_word)
+            stat_class.add_stat(player_name, difficulty, word_length, rnd + 1, won)
             print(f"The word is {word}. Unfortunately, you did not get it right this time...\nBetter luck next time!\n")
 
         # Reset hidden_word
@@ -150,10 +149,6 @@ def get_response(url):
     except requests.exceptions.RequestException as e:
         print(f"Request Exception: {e}")
         return None
-
-
-def show_stats():
-    pass
 
 
 if __name__ == "__main__":
