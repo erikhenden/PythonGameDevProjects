@@ -87,7 +87,7 @@ def play(player_name, stat_class, rounds=5):
     url_modified = f"https://random-word-api.herokuapp.com/word?length={word_length}&diff={difficulty}"
 
     # Get a random word
-    response = get_response(url_modified)[0]
+    response = get_response(url_modified)
     if response is None:
         print("Problems/error with the url / requests... Can't get a valid word.")
         return
