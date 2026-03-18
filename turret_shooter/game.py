@@ -1,5 +1,6 @@
 import pygame
-from models import GameObject
+from models import GameObject, Turret
+from pygame.transform import rotozoom
 from utils import load_sprite
 
 
@@ -13,15 +14,8 @@ class TurretShooter:
         self.screen = pygame.display.set_mode((800, 600))
         self.background = load_sprite("space", False)
 
-        # Load spaceship
-        sprite = load_sprite("turret2")
-        self.ship = GameObject((400, 300), sprite, (0, 0))
-
-        # Load astroid
-        sprite = load_sprite("astroid")
-        self.astroid = GameObject((50, 300), sprite, (1, 0))
-
-        self.collision_count = 0
+        # Load turret
+        self.turret = Turret((400, 300))
 
         self.running = True
 
@@ -36,24 +30,29 @@ class TurretShooter:
             if event.type == pygame.QUIT:
                 self.running = False
 
-            # Quit if q is pressed
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
-                    self.running = False
+
+        keypress = pygame.key.get_pressed()
+        if keypress[pygame.K_ESCAPE] or keypress[pygame.K_q]:
+            quit()
+
+        # Rotate
+        elif keypress[pygame.K_d]:
+            self.turret.rotate(clockwise=True)
+        elif keypress[pygame.K_a]:
+            self.turret.rotate(clockwise=False)
+
+        # Accelerate
+        elif keypress[pygame.K_w]:
+            self.turret.accelerate()
 
     def _game_logic(self):
         # Where objects can be moved around
-        self.ship.move()
-        self.astroid.move()
+        self.turret.move()
 
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
-        self.ship.draw(self.screen)
-        self.astroid.draw(self.screen)
+        self.turret.draw(self.screen)
 
-        if self.ship.collides_with(self.astroid):
-            self.collision_count += 1
-            print(f"Collision #{self.collision_count}")
 
         pygame.display.flip()
         self.clock.tick(60)
