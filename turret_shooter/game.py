@@ -1,7 +1,10 @@
 import pygame
 from models import Turret, Rock
-from pygame.transform import rotozoom
 from utils import load_sprite
+
+
+bullets = []
+rocks = []
 
 
 class TurretShooter:
@@ -14,13 +17,13 @@ class TurretShooter:
         self.screen = pygame.display.set_mode((800, 600))
         self.background = load_sprite("space", False)
 
-        self.bullets = []
+        global bullets, rocks
 
         # Load turret
-        self.turret = Turret((400, 300), self.bullets)
+        self.turret = Turret((400, 300), bullets)
 
         # Load Rocks
-        self.rocks = [Rock(self.screen, self.turret.position) for _ in range(6)]
+        rocks = [Rock.create_random(self.screen, self.turret.position) for _ in range(6)]
 
         self.running = True
 
@@ -61,31 +64,37 @@ class TurretShooter:
     # Returns a list of all the game objects in the game
     @property
     def game_objects(self):
-        return [*self.rocks, *self.bullets, self.turret]
+        global bullets, rocks
+        stuff = [*rocks, *bullets]
+        if self.turret is not None:
+            stuff.append(self.turret)
+        return stuff
 
     def _game_logic(self):
         # Where objects can be moved around
         for obj in self.game_objects:
-            if obj is not None:
-                obj.move(self.screen)
+            obj.move(self.screen)
+
+        global bullets, rocks
 
         # Remove bullets off-screen
         rect = self.screen.get_rect()
-        for bullet in self.bullets[:]:
+        for bullet in bullets[:]:
             if not rect.collidepoint(bullet.position):
-                self.bullets.remove(bullet)
+                bullets.remove(bullet)
 
         # Check bullet-rock collision
-        for bullet in self.bullets[:]:
-            for rock in self.rocks[:]:
+        for bullet in bullets[:]:
+            for rock in rocks[:]:
                 if rock.collides_with(bullet):
-                    self.rocks.remove(rock)
-                    self.bullets.remove(bullet)
+                    rocks.remove(rock)
+                    rock.split()
+                    bullets.remove(bullet)
                     break
 
         # Check turret-rock collision
         if self.turret:
-            for rock in self.rocks[:]:
+            for rock in rocks[:]:
                 if rock.collides_with(self.turret):
                     self.turret = None
                     break
@@ -93,8 +102,7 @@ class TurretShooter:
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
         for obj in self.game_objects:
-            if obj is not None:
-                obj.draw(self.screen)
+            obj.draw(self.screen)
 
 
         pygame.display.flip()

@@ -67,21 +67,44 @@ class Rock(GameObject):
     MIN_START_GAP = 250
     MIN_SPEED = 1
     MAX_SPEED = 3
-    def __init__(self, surface, ship_position):
+
+    @classmethod
+    def create_random(cls, surface, ship_position):
         # Generate a random position until the rock is far enough away from the ship
         while True:
             position = Vector2(
                 random.randrange(surface.get_width()),
                 random.randrange(surface.get_height())
             )
-            if position.distance_to(ship_position) > self.MIN_START_GAP:
+            if position.distance_to(ship_position) > cls.MIN_START_GAP:
                 break
 
+        return Rock(position)
+
+    def __init__(self, position, size=3):
+        self.size = size
+        if size == 3:  # Full size astroid/rock
+            scale = 1.0
+        elif size == 2:  # Medium sized astroid/rock
+            scale = 0.5
+        else:  # Small size astroid/rock
+            scale = 0.25
+
+        sprite = rotozoom(load_sprite("astroid2"), 0, scale)
+
+        # Random velocity
         speed = random.randint(self.MIN_SPEED, self.MAX_SPEED)
         angle = random.randint(0, 360)
         velocity = Vector2(speed, 0).rotate(angle)
 
-        super().__init__(position, load_sprite("astroid", True), velocity)
+        super().__init__(position, sprite, velocity)
+
+    def split(self):
+        if self.size > 1:
+            from game import rocks
+
+            rocks.append(Rock(self.position, self.size - 1))
+            rocks.append(Rock(self.position, self.size - 1))
 
 
 class Bullet(GameObject):
