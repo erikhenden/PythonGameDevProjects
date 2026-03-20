@@ -20,7 +20,7 @@ class TurretShooter:
         global bullets, rocks
 
         # Load turret
-        self.turret = Turret((400, 300), bullets)
+        self.turret = Turret((400, 300))
 
         # Load Rocks
         rocks = [Rock.create_random(self.screen, self.turret.position) for _ in range(6)]

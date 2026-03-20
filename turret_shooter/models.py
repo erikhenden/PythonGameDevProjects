@@ -1,6 +1,6 @@
 from pygame.math import Vector2
 from pygame.transform import rotozoom
-from utils import load_sprite, wrap_position
+from utils import load_sprite, wrap_position, load_sound
 import random
 
 DIRECTION_UP = Vector2(0, -1)
@@ -35,10 +35,10 @@ class Turret(GameObject):
     ACCELERATION = 0.25
     BULLET_SPEED = 3
 
-    def __init__(self, position, bullet_container):
+    def __init__(self, position):
         super().__init__(position, load_sprite("turret2"), Vector2(0))
         self.direction = Vector2(DIRECTION_UP)
-        self.bullet_container = bullet_container
+        self.pew_pew = load_sound("laser")
 
     def rotate(self, clockwise=True):
         sign = 1 if clockwise else -1
@@ -51,8 +51,12 @@ class Turret(GameObject):
     def shoot(self):
         velocity = self.direction * self.BULLET_SPEED + self.velocity
         bullet = Bullet(self.position, velocity)
-        self.bullet_container.append(bullet)
-        print(f"# bullets: {len(self.bullet_container)}")
+
+        from game import bullets
+        bullets.append(bullet)
+
+        self.pew_pew.play()
+
 
     def draw(self, surface):
         angle = self.direction.angle_to(Vector2(DIRECTION_UP))
