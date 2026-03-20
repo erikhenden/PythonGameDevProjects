@@ -1,5 +1,5 @@
 import pygame
-from models import GameObject, Turret
+from models import Turret, Rock
 from pygame.transform import rotozoom
 from utils import load_sprite
 
@@ -14,8 +14,13 @@ class TurretShooter:
         self.screen = pygame.display.set_mode((800, 600))
         self.background = load_sprite("space", False)
 
+        self.bullets = []
+
         # Load turret
-        self.turret = Turret((400, 300))
+        self.turret = Turret((400, 300), self.bullets)
+
+        # Load Rocks
+        self.rocks = [Rock(self.screen, self.turret.position) for _ in range(6)]
 
         self.running = True
 
@@ -29,6 +34,10 @@ class TurretShooter:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.turret.shoot()
 
 
         keypress = pygame.key.get_pressed()
@@ -45,13 +54,26 @@ class TurretShooter:
         elif keypress[pygame.K_w]:
             self.turret.accelerate()
 
+    # Returns a list of all the game objects in the game
+    @property
+    def game_objects(self):
+        return [*self.rocks, *self.bullets, self.turret]
+
     def _game_logic(self):
         # Where objects can be moved around
-        self.turret.move(self.screen)
+        for obj in self.game_objects:
+            obj.move(self.screen)
+
+        # Remove bullets off-screen
+        rect = self.screen.get_rect()
+        for bullet in self.bullets[:]:
+            if not rect.collidepoint(bullet.position):
+                self.bullets.remove(bullet)
 
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
-        self.turret.draw(self.screen)
+        for obj in self.game_objects:
+            obj.draw(self.screen)
 
 
         pygame.display.flip()
