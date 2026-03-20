@@ -36,13 +36,17 @@ class TurretShooter:
                 self.running = False
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and self.turret is not None:
                     self.turret.shoot()
 
 
         keypress = pygame.key.get_pressed()
         if keypress[pygame.K_ESCAPE] or keypress[pygame.K_q]:
             quit()
+
+        # Exit input handling method early if turret does not exist
+        if self.turret is None:
+            return
 
         # Rotate
         elif keypress[pygame.K_d]:
@@ -62,7 +66,8 @@ class TurretShooter:
     def _game_logic(self):
         # Where objects can be moved around
         for obj in self.game_objects:
-            obj.move(self.screen)
+            if obj is not None:
+                obj.move(self.screen)
 
         # Remove bullets off-screen
         rect = self.screen.get_rect()
@@ -70,10 +75,26 @@ class TurretShooter:
             if not rect.collidepoint(bullet.position):
                 self.bullets.remove(bullet)
 
+        # Check bullet-rock collision
+        for bullet in self.bullets[:]:
+            for rock in self.rocks[:]:
+                if rock.collides_with(bullet):
+                    self.rocks.remove(rock)
+                    self.bullets.remove(bullet)
+                    break
+
+        # Check turret-rock collision
+        if self.turret:
+            for rock in self.rocks[:]:
+                if rock.collides_with(self.turret):
+                    self.turret = None
+                    break
+
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
         for obj in self.game_objects:
-            obj.draw(self.screen)
+            if obj is not None:
+                obj.draw(self.screen)
 
 
         pygame.display.flip()
