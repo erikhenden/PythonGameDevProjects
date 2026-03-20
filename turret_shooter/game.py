@@ -1,6 +1,6 @@
 import pygame
 from models import Turret, Rock
-from utils import load_sprite
+from utils import load_sprite, print_text
 
 
 bullets = []
@@ -13,6 +13,8 @@ class TurretShooter:
         pygame.init()
         pygame.display.set_caption("Turret Shooter")
         self.clock = pygame.time.Clock()
+        self.font = pygame.font.SysFont(None, 64)
+        self.message = ""
 
         self.screen = pygame.display.set_mode((800, 600))
         self.background = load_sprite("space", False)
@@ -97,12 +99,19 @@ class TurretShooter:
             for rock in rocks[:]:
                 if rock.collides_with(self.turret):
                     self.turret = None
+                    self.message = "You lost!"
                     break
+
+        if not rocks and self.turret:
+            self.message = "You won!"
 
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
         for obj in self.game_objects:
             obj.draw(self.screen)
+
+        if self.message:
+            print_text(self.screen, self.message, self.font)
 
 
         pygame.display.flip()
