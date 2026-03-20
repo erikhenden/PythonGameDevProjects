@@ -47,7 +47,7 @@ class TurretShooter:
 
     def _game_logic(self):
         # Where objects can be moved around
-        self.turret.move()
+        self.turret.move(self.screen)
 
     def _draw(self):
         self.screen.blit(self.background, (0, 0))
