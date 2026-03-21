@@ -41,6 +41,12 @@ class Jumper(GameObject):
         self.velocity += self.gravity
         self.position += self.velocity
 
+        # Wrap horizontally: exit one side, reappear on the other
+        if self.position.x + self.width < 0:
+            self.position.x = surface.get_width()
+        elif self.position.x > surface.get_width():
+            self.position.x = -self.width
+
 
 class Platform(GameObject):
     WIDTH = 80
