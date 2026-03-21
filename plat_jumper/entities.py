@@ -29,9 +29,8 @@ class Jumper(GameObject):
     def get_rect(self):
         return pygame.Rect(self.position.x, self.position.y, self.width, self.height)
 
-    def jump(self):
-        self.velocity.y = 0
-        self.velocity.y -= 10
+    def jump(self, impulse=-10):
+        self.velocity.y = impulse
 
     def move_sideways(self, right=True):
         direction = 1 if right else -1
@@ -56,6 +55,50 @@ class Platform(GameObject):
         sprite = pygame.Surface((self.WIDTH, self.HEIGHT))
         sprite.fill(pygame.Color("sienna"))
         super().__init__(position, sprite)
+        self.dead = False
 
     def get_rect(self):
         return pygame.Rect(self.position.x, self.position.y, self.WIDTH, self.HEIGHT)
+
+    def on_land(self, jumper):
+        """Called by collision detection when the jumper lands on this platform."""
+        jumper.jump()
+
+
+class CrumblingPlatform(Platform):
+    """Disappears shortly after the player lands on it."""
+    CRUMBLE_FRAMES = 45  # ~0.75 s at 60 fps
+
+    def __init__(self, position):
+        super().__init__(position)
+        self.sprite.fill(pygame.Color("peru"))
+        self._crumbling = False
+        self._timer = self.CRUMBLE_FRAMES
+
+    def on_land(self, jumper):
+        jumper.jump()
+        self._crumbling = True
+
+    def update(self, surface):
+        if self._crumbling:
+            self._timer -= 1
+            if self._timer <= 0:
+                self.dead = True
+
+    def draw(self, surface):
+        # Flash every 6 frames while crumbling to warn the player
+        if self._crumbling and (self._timer // 6) % 2 == 0:
+            return
+        surface.blit(self.sprite, self.position)
+
+
+class SpringPlatform(Platform):
+    """Launches the player much higher than a normal jump."""
+    IMPULSE = -18
+
+    def __init__(self, position):
+        super().__init__(position)
+        self.sprite.fill(pygame.Color("limegreen"))
+
+    def on_land(self, jumper):
+        jumper.jump(self.IMPULSE)

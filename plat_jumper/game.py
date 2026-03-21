@@ -1,6 +1,6 @@
 import pygame
 import random
-from entities import Jumper, Platform
+from entities import Jumper, Platform, CrumblingPlatform, SpringPlatform
 
 SCREEN_W, SCREEN_H = 800, 600
 # Camera scrolls when player rises above this Y position
@@ -56,12 +56,21 @@ class Game:
     def game_objects(self):
         return [self.jumper] + self.platforms
 
+    def _make_platform(self, x, y):
+        """Pick a platform variant by weighted chance."""
+        roll = random.random()
+        if roll < 0.10:
+            return SpringPlatform((x, y))
+        if roll < 0.30:
+            return CrumblingPlatform((x, y))
+        return Platform((x, y))
+
     def _fill_platforms(self):
         """Spawn platforms above _top_platform_y until comfortably above the screen top."""
         while self._top_platform_y > -200:
             y = self._top_platform_y - random.randint(60, 100)
             x = random.randint(40, SCREEN_W - Platform.WIDTH - 40)
-            self.platforms.append(Platform((x, y)))
+            self.platforms.append(self._make_platform(x, y))
             self._top_platform_y = y
 
     def _scroll_camera(self):
@@ -76,8 +85,8 @@ class Game:
         self.score += int(shift)
 
     def _cull_platforms(self):
-        """Remove platforms that have scrolled below the screen."""
-        self.platforms = [p for p in self.platforms if p.position.y < SCREEN_H]
+        """Remove platforms that have scrolled below the screen or crumbled away."""
+        self.platforms = [p for p in self.platforms if p.position.y < SCREEN_H and not p.dead]
 
     def _check_collisions(self):
         jumper = self.jumper
@@ -101,7 +110,7 @@ class Game:
             # Land if feet crossed the platform top this frame (pass-through from below allowed)
             if j_bottom_prev <= p_top <= j_bottom:
                 jumper.position.y = p_top - jumper.height
-                jumper.jump()  # auto-jump on landing, Doodle Jump style
+                platform.on_land(jumper)  # each variant handles its own jump + side effects
                 break
 
     def _game_logic(self):
