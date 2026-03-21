@@ -1,6 +1,6 @@
 import pygame
 from pygame import Vector2
-from utils import load_image
+from utils import load_image, load_sound
 
 
 class GameObject:
@@ -25,12 +25,14 @@ class Jumper(GameObject):
         self.width = self.sprite.get_width()
         self.height = self.sprite.get_height()
         self.position -= Vector2(self.sprite.get_size()) // 2
+        self.jump_sound = load_sound("jump_sound")
 
     def get_rect(self):
         return pygame.Rect(self.position.x, self.position.y, self.width, self.height)
 
     def jump(self, impulse=-10):
         self.velocity.y = impulse
+        self.jump_sound.play()
 
     def move_sideways(self, right=True):
         direction = 1 if right else -1
