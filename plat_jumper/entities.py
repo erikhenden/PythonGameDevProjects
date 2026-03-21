@@ -41,10 +41,6 @@ class Jumper(GameObject):
         self.velocity += self.gravity
         self.position += self.velocity
 
-        # Ensure jumper does not fall off the bottom of the screen
-        if self.position.y + self.height > surface.get_height():
-            self.position.y = surface.get_height() - self.height
-
 
 class Platform(GameObject):
     WIDTH = 80
