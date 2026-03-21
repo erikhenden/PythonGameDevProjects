@@ -9,27 +9,30 @@ SCROLL_THRESHOLD = SCREEN_H * 0.4
 
 class Game:
     def __init__(self):
-        self.running = True
-
         pygame.init()
         pygame.display.set_caption("Jumper")
         self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
         self.clock = pygame.time.Clock()
         self.font = pygame.font.SysFont(None, 36)
+        self.font_large = pygame.font.SysFont(None, 72)
 
+        self.running = True
+        self._reset()
+
+    def _reset(self):
+        """Initialise (or reinitialise) all game state for a new run."""
         self.jumper = Jumper((400, 300))
-
-        # One platform directly under the starting position
         self.platforms = [Platform((360, 340))]
-        self._top_platform_y = 340  # world Y of highest generated platform so far
+        self._top_platform_y = 340
         self.score = 0
-
+        self.game_over = False
         self._fill_platforms()
 
     def main_loop(self):
         while self.running:
             self._handle_input()
-            self._game_logic()
+            if not self.game_over:
+                self._game_logic()
             self._draw()
 
     def _handle_input(self):
@@ -39,12 +42,15 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
                     self.running = False
+                if self.game_over and event.key == pygame.K_r:
+                    self._reset()
 
-        keypress = pygame.key.get_pressed()
-        if keypress[pygame.K_a]:
-            self.jumper.move_sideways(False)
-        elif keypress[pygame.K_d]:
-            self.jumper.move_sideways(True)
+        if not self.game_over:
+            keypress = pygame.key.get_pressed()
+            if keypress[pygame.K_a]:
+                self.jumper.move_sideways(False)
+            elif keypress[pygame.K_d]:
+                self.jumper.move_sideways(True)
 
     @property
     def game_objects(self):
@@ -106,9 +112,8 @@ class Game:
         self._cull_platforms()
         self._fill_platforms()
 
-        # Game over: player fell off the bottom of the screen
         if self.jumper.position.y > SCREEN_H:
-            self.running = False
+            self.game_over = True
 
     def _draw(self):
         self.screen.fill(pygame.Color("skyblue"))
@@ -118,5 +123,23 @@ class Game:
         score_surf = self.font.render(f"Score: {self.score}", True, pygame.Color("black"))
         self.screen.blit(score_surf, (10, 10))
 
+        if self.game_over:
+            self._draw_game_over()
+
         pygame.display.flip()
         self.clock.tick(60)
+
+    def _draw_game_over(self):
+        # Semi-transparent dark overlay
+        overlay = pygame.Surface((SCREEN_W, SCREEN_H), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 150))
+        self.screen.blit(overlay, (0, 0))
+
+        over_surf = self.font_large.render("GAME OVER", True, pygame.Color("white"))
+        score_surf = self.font.render(f"Score: {self.score}", True, pygame.Color("white"))
+        hint_surf = self.font.render("R — restart    Q — quit", True, pygame.Color("lightgray"))
+
+        cx = SCREEN_W // 2
+        self.screen.blit(over_surf, over_surf.get_rect(center=(cx, 230)))
+        self.screen.blit(score_surf, score_surf.get_rect(center=(cx, 310)))
+        self.screen.blit(hint_surf, hint_surf.get_rect(center=(cx, 360)))
