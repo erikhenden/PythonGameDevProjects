@@ -27,6 +27,7 @@ class TurretShooter:
         # Load Rocks
         rocks = [Rock.create_random(self.screen, self.turret.position) for _ in range(6)]
 
+        self.game_over = False
         self.running = True
 
     def main_loop(self):
@@ -34,6 +35,17 @@ class TurretShooter:
             self._handle_input()
             self._game_logic()
             self._draw()
+
+    def _reset_game(self):
+        # Load turret
+        self.turret = Turret((400, 300))
+
+        # Load Rocks
+        global rocks
+        rocks = [Rock.create_random(self.screen, self.turret.position) for _ in range(6)]
+
+        self.message = ""
+        self.game_over = False
 
     def _handle_input(self):
         for event in pygame.event.get():
@@ -43,6 +55,8 @@ class TurretShooter:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and self.turret is not None:
                     self.turret.shoot()
+                if event.key == pygame.K_r:
+                    self._reset_game()
 
 
         keypress = pygame.key.get_pressed()
@@ -54,13 +68,13 @@ class TurretShooter:
             return
 
         # Rotate
-        elif keypress[pygame.K_d]:
+        if keypress[pygame.K_d]:
             self.turret.rotate(clockwise=True)
         elif keypress[pygame.K_a]:
             self.turret.rotate(clockwise=False)
 
         # Accelerate
-        elif keypress[pygame.K_w]:
+        if keypress[pygame.K_w]:
             self.turret.accelerate()
 
     # Returns a list of all the game objects in the game
@@ -99,9 +113,11 @@ class TurretShooter:
             for rock in rocks[:]:
                 if rock.collides_with(self.turret):
                     self.turret = None
-                    self.message = "You lost!"
+                    self.message = "You lost! R = Restart, Q = Quit"
+                    self.game_over = True
                     break
 
+        # Check winning condition
         if not rocks and self.turret:
             self.message = "You won!"
 
