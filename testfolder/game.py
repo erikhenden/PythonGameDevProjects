@@ -1,4 +1,5 @@
 import pygame
+from world import draw
 
 
 class Game:
@@ -27,7 +28,9 @@ class Game:
         pass
 
     def _draw(self):
-        self.screen.fill(pygame.Color("brown"))
+        # Draw
+        draw(self.screen)
+
         pygame.display.flip()
 
     def quit(self):
