@@ -47,9 +47,9 @@ class Game:
 
         if not self.game_over:
             keypress = pygame.key.get_pressed()
-            if keypress[pygame.K_a]:
+            if keypress[pygame.K_a] or keypress[pygame.K_LEFT]:
                 self.jumper.move_sideways(False)
-            elif keypress[pygame.K_d]:
+            elif keypress[pygame.K_d] or keypress[pygame.K_RIGHT]:
                 self.jumper.move_sideways(True)
 
     @property
