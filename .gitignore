@@ -1,0 +1,14 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Save files
+math_game/save.json
+
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
